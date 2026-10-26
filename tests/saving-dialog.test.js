@@ -9,7 +9,7 @@ const saveSource=source.slice(saveStart,saveEnd);
 
 test('saveEditor shows a blocking saving dialog and always hides it',()=>{
   assert.match(source,/id='saving-dialog'/);
-  assert.match(source,/保存中です…/);
+  assert.match(source,/保存しています…/);
   assert.match(source,/pointer-events:auto/);
   assert.match(source,/@keyframes saving-dialog-spin/);
   assert.match(saveSource,/saving=true;showSavingDialog\(\)/);

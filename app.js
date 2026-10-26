@@ -42,7 +42,7 @@ function showSavingDialog(){
     document.head.append(style);
     overlay=document.createElement('div');
     overlay.id='saving-dialog';overlay.hidden=true;overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','保存しています');
-    overlay.innerHTML='<div class="saving-dialog-card"><span class="saving-dialog-spinner" aria-hidden="true"></span><span>保存中です…</span></div>';
+    overlay.innerHTML='<div class="saving-dialog-card"><span class="saving-dialog-spinner" aria-hidden="true"></span><span>保存しています…</span></div>';
     document.body.append(overlay);
   }
   overlay.hidden=false;
