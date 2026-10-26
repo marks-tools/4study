@@ -6,7 +6,7 @@ const source=readFileSync(new URL('../dist/app.js',import.meta.url),'utf8');
 const section=(start,end)=>source.slice(source.indexOf(start),source.indexOf(end,source.indexOf(start)));
 
 test('settings shows the app version and delegated update action',()=>{
-  assert.match(source,/const APP_VERSION = '2026\.10\.26-1'/);
+  assert.match(source,/const APP_VERSION = '2026\.10\.26-2'/);
   const settings=section('function settings()','\nfunction switchAuthMode(');
   assert.match(settings,/バージョン<\/strong> \$\{APP_VERSION\}/);
   assert.match(settings,/data-action="check-update">アップデートを確認/);
