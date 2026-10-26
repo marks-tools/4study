@@ -15,14 +15,32 @@ test('rateLabel formats unattempted and attempted accuracy',()=>{
   assert.equal(context.rateLabel({rate:1,correct:5,total:5}),'正答率 100%（5/5）');
 });
 
-test('question list renders solve, edit, and delete actions with only solve primary',()=>{
+test('question list renders compact solve, edit, and delete actions',()=>{
   const start=source.indexOf('function list()');
   const end=source.indexOf('\nfunction setup(',start);
   const listSource=source.slice(start,end);
-  assert.match(listSource,/<button class="primary" data-solve=/);
-  assert.match(listSource,/<button data-edit=/);
-  assert.match(listSource,/<button data-delete=/);
-  assert.doesNotMatch(listSource,/<button class="primary" data-(?:edit|delete)=/);
+  assert.match(listSource,/<button class="primary small-button" data-solve="\$\{q\.id\}">解く<\/button>/);
+  assert.match(listSource,/<button class="small-button" data-edit=/);
+  assert.match(listSource,/<button class="small-button" data-delete=/);
+  assert.doesNotMatch(listSource,/<button class="primary(?: small-button)?" data-(?:edit|delete)=/);
+});
+
+test('question list rows omit question text and genre and conditionally show accuracy',()=>{
+  const start=source.indexOf('function list()');
+  const end=source.indexOf('\nfunction setup(',start);
+  const listSource=source.slice(start,end);
+  assert.doesNotMatch(listSource,/q\.text|q\.genre|bookName\(/);
+  assert.match(listSource,/s\.rate!==null\?`<span>\$\{rateLabel\(s\)\}<\/span>`:''/);
+  assert.doesNotMatch(listSource,/未挑戦/);
+});
+
+test('list refresh button is inserted beside the rank filter',()=>{
+  const start=source.indexOf('function list()');
+  const end=source.indexOf('\nfunction setup(',start);
+  const listSource=source.slice(start,end);
+  assert.match(listSource,/#list-filters select\[name="rank"\]/);
+  assert.match(listSource,/insertAdjacentElement\('afterend',syncButton\)/);
+  assert.match(listSource,/syncButton\.dataset\.action='sync'/);
 });
 
 test('list delete confirms and edit keeps draft restore confirmation',()=>{
