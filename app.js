@@ -41,8 +41,8 @@ function showSavingDialog(){
     style.textContent='@keyframes saving-dialog-spin{to{transform:rotate(360deg)}}#saving-dialog{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;background:rgba(15,23,42,.55);pointer-events:auto}#saving-dialog[hidden]{display:none}#saving-dialog .saving-dialog-card{display:flex;align-items:center;gap:14px;min-width:220px;padding:22px 26px;border-radius:14px;background:#fff;color:#172033;box-shadow:0 18px 48px rgba(0,0,0,.28);font-weight:700}#saving-dialog .saving-dialog-spinner{width:24px;height:24px;border:3px solid #cbd5e1;border-top-color:#2563eb;border-radius:50%;animation:saving-dialog-spin .8s linear infinite}';
     document.head.append(style);
     overlay=document.createElement('div');
-    overlay.id='saving-dialog';overlay.hidden=true;overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','保存しています');
-    overlay.innerHTML='<div class="saving-dialog-card"><span class="saving-dialog-spinner" aria-hidden="true"></span><span>保存しています…</span></div>';
+    overlay.id='saving-dialog';overlay.hidden=true;overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','登録しています');
+    overlay.innerHTML='<div class="saving-dialog-card"><span class="saving-dialog-spinner" aria-hidden="true"></span><span>登録しています…</span></div>';
     document.body.append(overlay);
   }
   overlay.hidden=false;
