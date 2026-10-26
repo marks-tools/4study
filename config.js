@@ -1,0 +1,2 @@
+// 公開用キー。データのアクセス制御はSupabaseのRLSで行います。
+window.YONSTUDY_CONFIG = { supabaseUrl: 'https://cvcdzhtgktsprfemlmat.supabase.co', supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2Y2R6aHRna3RzcHJmZW1sbWF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0NzgzNTcsImV4cCI6MjEwODA1NDM1N30.LIOxNyMHKFgxfK95MV3lIvM1rHHJe2DBVvxO0FuYljU' };

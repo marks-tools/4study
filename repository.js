@@ -1,0 +1,16 @@
+const DB='yonstudy-drafts-v1';
+function db(){return new Promise((resolve,reject)=>{const r=indexedDB.open(DB,1);r.onupgradeneeded=()=>r.result.createObjectStore('temporary');r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});}
+export async function localGet(key){const d=await db();return new Promise((resolve,reject)=>{const tx=d.transaction('temporary','readonly');const r=tx.objectStore('temporary').get(key);r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);tx.oncomplete=()=>d.close();});}
+export async function localPut(key,value){const d=await db();return new Promise((resolve,reject)=>{const tx=d.transaction('temporary','readwrite');if(value===undefined)tx.objectStore('temporary').delete(key);else tx.objectStore('temporary').put(value,key);tx.oncomplete=()=>{d.close();resolve();};tx.onerror=()=>{d.close();reject(tx.error);};});}
+export function createRepository(client){const check=r=>{if(r.error)throw r.error;return r.data;};async function all(table){let rows=[];for(let page=0;;page++){const batch=check(await client.from(table).select('*').order('id').range(page*500,page*500+499));rows.push(...batch);if(batch.length<500)return rows;}}
+return {async load(){const [books,questions,choices,assets,history]=await Promise.all(['question_books','questions','question_choices','question_assets','answer_history'].map(all));const signed=assets.length?check(await client.storage.from('question-assets').createSignedUrls(assets.map(a=>a.storage_path),3600)):[];for(let i=0;i<assets.length;i++){assets[i].url=signed[i]?.signedUrl;if(!assets[i].url)throw Error('画像を読み込めませんでした。通信環境を確認してください');}return {books,questions:questions.map(q=>({...q,choices:choices.filter(c=>c.question_id===q.id).sort((a,b)=>a.position-b.position),assets:assets.filter(a=>a.question_id===q.id).sort((a,b)=>a.display_order-b.display_order)})),history};},
+async book(book,user){return check(await client.from('question_books').insert({...book,user_id:user}).select().single());},
+async saveBook(book,user,update){const {id,...fields}=book;const query=update?client.from('question_books').update(fields).eq('id',book.id):client.from('question_books').insert({...book,user_id:user});return check(await query.select().single());},
+async scan(body){const r=await client.functions.invoke('scan-question',{body});if(r.error)throw Error('写真読み取りに接続できません。管理者のAPI設定を確認してください。');if(r.data?.error)throw Error(r.data.error);return r.data;},
+async save(q){return check(await client.rpc('save_question',{p:q}));},
+async hasQuestion(id){return !!check(await client.from('questions').select('id').eq('id',id).maybeSingle());},
+async answer(event){return check(await client.rpc('record_answer',{p:event}));},
+async remove(q){const paths=check(await client.rpc('delete_question',{qid:q.id,expected_revision:q.revision}));if(paths?.length){const r=await client.storage.from('question-assets').remove(paths);if(r.error)return '問題は削除しましたが画像の片付けに失敗しました。Storageに未参照画像が残っています。';}return '';},
+async upload(path,file){check(await client.storage.from('question-assets').upload(path,file,{contentType:file.type,upsert:false}));},
+async removeAssets(paths){if(paths.length)check(await client.storage.from('question-assets').remove(paths));}
+};}

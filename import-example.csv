@@ -1,0 +1,3 @@
+question_book,category,genre,question,choice_a,choice_b,choice_c,choice_d,choice_e,correct_choice,explanation,memory_tip,personal_note,frequency,difficulty,tags,shuffle
+練習用サンプル,算数,計算,5 × 3 はいくつですか？,8,15,20,25,,B,5を3回足すと15です。,,,B,1,"計算,基礎",TRUE
+練習用サンプル,算数,計算,"次のうち、最も大きい数はどれですか？",1,2,3,4,5,E,5が最も大きい数です。,,,B,1,基礎,FALSE
